@@ -12,8 +12,7 @@ math so a UI ticks per second without RPC calls, and a static reference app, "Co
 
 > **Status:** **live on Arc mainnet** since 2026-09-18. `DripPool` is deployed at
 > [`0x92b8fdB2c457b64d4510aC980A84283356D8A44f`](https://explorer.arc.io/address/0x92b8fdB2c457b64d4510aC980A84283356D8A44f)
-> and verified on Sourcify (exact match). Proof rows 1–9 are recorded below; row 10 lands after three days of
-> streaming (from 2026-09-21 ≈ 19:00 UTC). **Unaudited and
+> and verified on Sourcify (exact match). All ten proof rows are recorded below. **Unaudited and
 > experimental**: keep amounts small.
 
 > **Name:** the project was called ArcDrip until 2026-09-18 and was renamed to avoid a clash with an unrelated
@@ -243,7 +242,8 @@ Every hash below was re-checked with `cast receipt` (status 1). The same hashes 
 on 2026-09-19 03:00–03:04 UTC, after proof pool 1 ran dry: `claimable(main)` read 206,369 units at 03:00:11 and
 again at 03:01:13 UTC with 0 unstreamed, so the freeze in row 5 is two read-only calls 60 s apart, not a
 transaction; after the resume deposit it read 206,390 (streaming again from the deposit, no back-pay for the
-frozen interval). Row 10 needs three days of streaming (runnable after 2026-09-21 ≈ 19:00 UTC). Amounts are reduced from the original plan (resume
+frozen interval). Row 10 is a read-only reconciliation, run on 2026-09-21 once pool 1 was three days old; it is not a
+transaction. Amounts are reduced from the original plan (resume
 deposit 1 USDC instead of 5, sweep 0.5 USDC instead of 1, pool 2 deposit 0.2 USDC instead of 1) to fit the
 wallet's balance. Pool 2 also has one extra member `withdraw` sent *before* the cancel
 ([`0x8d9bfc93…`](https://explorer.arc.io/tx/0x8d9bfc93a196c139babeb37c24a6b1eb862897daf7f372472b4b51b3cabc0d2e),
@@ -260,7 +260,7 @@ an operator ordering slip); the cancel and the post-cancel `withdraw` in row 9 a
 | 7 | `setShares(member, 0)` (leave), then `withdrawFor` still pays that member the accrued amount | [setShares(B, 0) `0x8b261783…`](https://explorer.arc.io/tx/0x8b261783b3e40d5af5c79e0c03a22a6d2e151a74f3653147ca640affddf74caf) · [withdrawFor(B) sent by OPS `0xf2ba7f39…`](https://explorer.arc.io/tx/0xf2ba7f392365fda143d5fedb2c3b2631881f2f4062782893aa44667b3c3f5add) |
 | 8 | `setRate(0)` (pause), `setRate` back, then `withdrawUnstreamed` of 0.5 USDC | [setRate(0) `0xf7f35443…`](https://explorer.arc.io/tx/0xf7f3544353c436f9cc42c72f132480541c0dc0318f5e6682cbbf5865ff1ab08d) · [setRate back `0x3fe0393e…`](https://explorer.arc.io/tx/0x3fe0393ef6e79cb5da7cabeb519ee2ee827da39e14de4644f8a8c51d1dcef8d3) · [withdrawUnstreamed 0.5 USDC `0x8db28d09…`](https://explorer.arc.io/tx/0x8db28d096871639a6c287aea7e39e08281c2f7af3cef059d087f97d3f5fce8b8) |
 | 9 | Proof pool 2: create, deposit 0.2 USDC, `cancel`, and the member withdraws **after** the cancel | [createPool `0xc0bc79e3…`](https://explorer.arc.io/tx/0xc0bc79e37451b8407a85a0588eb7a9cb4cb336f72a2e2bbaa9d10b1053d5224d) · [setShares(C, 1) `0x855f0d39…`](https://explorer.arc.io/tx/0x855f0d39ee98527ad61afa169df01900562fc5005bb9b89e9b528ebd24ba7b93) · [approve `0xbc59ad32…`](https://explorer.arc.io/tx/0xbc59ad3299a0f7d7744dd13cd96b7cf7f730485c73e47c64be0c06c1d4d84599) · [deposit `0x53f20456…`](https://explorer.arc.io/tx/0x53f2045644a09be8b8dadcabbbf0a4f0527cc96730aee743a44475928ad1d365) · [cancel `0x3fa2cf07…`](https://explorer.arc.io/tx/0x3fa2cf078949abee422a5c95ab405875b21b6eaacdae3b9f050490430f6d6cd6) · [withdraw after cancel (C) `0x1b0c57b5…`](https://explorer.arc.io/tx/0x1b0c57b5857f80972bf9790c186c1ce82cfae999b0e1721ba147fa125c454457) |
-| 10 | After ≥ 3 days streaming: `Σ withdrawn + Σ claimable + dust == streamed`, reconciled with the SDK | in progress — pool 1 is live at [0x92b8…A44f](https://explorer.arc.io/address/0x92b8fdB2c457b64d4510aC980A84283356D8A44f) ([app](https://r4topunk.github.io/sharedarc/app/pool/?id=1)) |
+| 10 | Three days after the pool was created: reconcile the whole lifecycle (stream → freeze → resume → batch → leave → pause → sweep) so that `Σ withdrawn + Σ claimable + sub-unit remainder + dust == streamed` | read-only, 2026-09-21 18:57 UTC, pool age 3.002 days, `pnpm --filter '@sharedarc/scripts' reconcile:mainnet` ([script](https://github.com/r4topunk/sharedarc/blob/main/scripts/reconcile-mainnet.ts), [output](https://github.com/r4topunk/sharedarc/blob/main/deployments/reconciliation-pool1.json)): net deposited 1.500000 USDC · streamed 1,499,999,999,999,990,400 wad · Σ withdrawn 1.000297 USDC (7 `Withdrawn`) · Σ claimable 0.499700 USDC (4 members) · sub-unit remainder 2,999,999,990,395 wad · **dust 5 wad = 5e-18 USDC** |
 
 ## Docs
 

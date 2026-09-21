@@ -47,5 +47,16 @@
     "pool1.pause": "0xf7f3544353c436f9cc42c72f132480541c0dc0318f5e6682cbbf5865ff1ab08d",
     "pool1.resumeRate": "0x3fe0393ef6e79cb5da7cabeb519ee2ee827da39e14de4644f8a8c51d1dcef8d3",
     "pool1.withdrawUnstreamed": "0x8db28d096871639a6c287aea7e39e08281c2f7af3cef059d087f97d3f5fce8b8"
+  },
+  "reconciliation": {
+    "pool": 1,
+    "note": "Proof row 10: read-only, not a transaction. Reproduce with `pnpm --filter @sharedarc/scripts reconcile:mainnet`.",
+    "script": "scripts/reconcile-mainnet.ts",
+    "output": "deployments/reconciliation-pool1.json",
+    "ranAt": "2026-09-21T18:57:54.000Z",
+    "poolAgeDays": 3.002,
+    "streamedWad": "1499999999999990400",
+    "dustWad": "5",
+    "identityHolds": true
   }
 }

@@ -3,8 +3,7 @@
 Paste-ready fields for https://dorahacks.io/hackathon/arc-microgrants. Deadline: **2026-10-14 23:59 ET**.
 The form keeps no draft (fill every field in one sitting) and its dropdowns linger from a previous attempt
 (re-check each one before submitting) — see [CHECKLIST.md](CHECKLIST.md).
-Filled from the repo and from mainnet receipts as of 2026-09-19. The proof row that cannot exist yet (row 10
-needs three days of streaming) reads "in progress" with the pool's explorer link;
+Filled from the repo and from mainnet receipts as of 2026-09-21, when row 10's reconciliation closed the set;
 **never fill one with a guess.**
 
 ## Name
@@ -146,7 +145,8 @@ and no upgrade path: nothing is held back after deploy.
 ## Mainnet proof transactions
 
 Same data as `deployments/arc-mainnet.json` `proofTxs` and the README's Mainnet proof table. Every hash has
-receipt status 1. Row 10 is still in progress: it runs after three days of streaming (after 2026-09-21 ≈ 19:00 UTC).
+receipt status 1. Row 10 is the one row that is not a transaction: it is a read-only reconciliation, run on
+2026-09-21 once pool 1 was three days old.
 
 | # | Proof | Tx |
 |---|---|---|
@@ -159,7 +159,7 @@ receipt status 1. Row 10 is still in progress: it runs after three days of strea
 | 7 | `setShares(member, 0)` (leave), then `withdrawFor` still pays that member the accrued amount | setShares(B, 0): https://explorer.arc.io/tx/0x8b261783b3e40d5af5c79e0c03a22a6d2e151a74f3653147ca640affddf74caf · withdrawFor(B) sent by OPS: https://explorer.arc.io/tx/0xf2ba7f392365fda143d5fedb2c3b2631881f2f4062782893aa44667b3c3f5add |
 | 8 | `setRate(0)` (pause), `setRate` back, then `withdrawUnstreamed` of 0.5 USDC | setRate(0): https://explorer.arc.io/tx/0xf7f3544353c436f9cc42c72f132480541c0dc0318f5e6682cbbf5865ff1ab08d · setRate back: https://explorer.arc.io/tx/0x3fe0393ef6e79cb5da7cabeb519ee2ee827da39e14de4644f8a8c51d1dcef8d3 · withdrawUnstreamed 0.5 USDC: https://explorer.arc.io/tx/0x8db28d096871639a6c287aea7e39e08281c2f7af3cef059d087f97d3f5fce8b8 |
 | 9 | Proof pool 2: create, deposit 0.2 USDC, `cancel`, and the member withdraws **after** the cancel | createPool: https://explorer.arc.io/tx/0xc0bc79e37451b8407a85a0588eb7a9cb4cb336f72a2e2bbaa9d10b1053d5224d · setShares(C, 1): https://explorer.arc.io/tx/0x855f0d39ee98527ad61afa169df01900562fc5005bb9b89e9b528ebd24ba7b93 · approve: https://explorer.arc.io/tx/0xbc59ad3299a0f7d7744dd13cd96b7cf7f730485c73e47c64be0c06c1d4d84599 · deposit: https://explorer.arc.io/tx/0x53f2045644a09be8b8dadcabbbf0a4f0527cc96730aee743a44475928ad1d365 · cancel: https://explorer.arc.io/tx/0x3fa2cf078949abee422a5c95ab405875b21b6eaacdae3b9f050490430f6d6cd6 · withdraw after cancel (C): https://explorer.arc.io/tx/0x1b0c57b5857f80972bf9790c186c1ce82cfae999b0e1721ba147fa125c454457 |
-| 10 | After ≥ 3 days streaming: `Σ withdrawn + Σ claimable + dust == streamed`, reconciled with the SDK | in progress — pool 1 is live: https://explorer.arc.io/address/0x92b8fdB2c457b64d4510aC980A84283356D8A44f · https://r4topunk.github.io/sharedarc/app/pool/?id=1 |
+| 10 | Three days after the pool was created: reconcile the whole lifecycle (stream → freeze → resume → batch → leave → pause → sweep) so that `Σ withdrawn + Σ claimable + sub-unit remainder + dust == streamed` | read-only, 2026-09-21 18:57 UTC, pool age 3.002 days, `pnpm --filter '@sharedarc/scripts' reconcile:mainnet` ([script](https://github.com/r4topunk/sharedarc/blob/main/scripts/reconcile-mainnet.ts), [output](https://github.com/r4topunk/sharedarc/blob/main/deployments/reconciliation-pool1.json)): net deposited 1.500000 USDC · streamed 1,499,999,999,999,990,400 wad · Σ withdrawn 1.000297 USDC (7 `Withdrawn`) · Σ claimable 0.499700 USDC (4 members) · sub-unit remainder 2,999,999,990,395 wad · **dust 5 wad = 5e-18 USDC** |
 
 PRD §10.2 definition of done: all ten rows recorded, each transaction status `success` on
 `https://explorer.arc.io`, and the three-day reconciliation showing dust below 1e-6 USDC.
@@ -183,8 +183,8 @@ than a canned demo — the point is that the other balances visibly do not move.
 
 - [x] Contract deployed and Sourcify-verified (exact match) — [CHECKLIST.md](CHECKLIST.md) steps 6–8
 - [x] Public repo pushed and project page live — [CHECKLIST.md](CHECKLIST.md) steps 25–26
-- [ ] All ten proof rows have status `success` on mainnet and are recorded above and in
-      `deployments/arc-mainnet.json` (rows 1–4 and 9 done 2026-09-18, 5–8 on 2026-09-19; 10 in progress)
+- [x] All ten proof rows are recorded above and in `deployments/arc-mainnet.json` (rows 1–4 and 9 on
+      2026-09-18, 5–8 on 2026-09-19, 10 on 2026-09-21); every transaction row has receipt status `success`
 - [x] `docs/GAS.md` mainnet column filled for the calls measured so far — [CHECKLIST.md](CHECKLIST.md) step 23
 - [x] Test counts re-checked against a fresh `pnpm check` (2026-09-18: 191 + 4 skipped, 217, 74, 36)
 - [x] Demo video: none (optional)

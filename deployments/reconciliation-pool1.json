@@ -1,0 +1,54 @@
+{
+  "poolId": "1",
+  "asOf": "2026-09-21T18:57:54.000Z",
+  "createdAt": "2026-09-18T18:54:22.000Z",
+  "ageDays": 3.002,
+  "deposited": "2.000000 USDC",
+  "sweptUnstreamed": "0.500000 USDC",
+  "netDeposited": "1.500000 USDC",
+  "balance": "0.499703 USDC",
+  "withdrawn": "1.000297 USDC",
+  "withdrawals": 7,
+  "claimable": "0.499700 USDC",
+  "members": [
+    {
+      "member": "0x39a7B6fa1597BB6657Fe84e64E3B836c37d6F75d",
+      "shares": "1",
+      "claimable": "0.124925 USDC",
+      "entitlementWad": "124925861111108989",
+      "subUnitWad": "861111108989",
+      "matchesContract": true
+    },
+    {
+      "member": "0x47bD13c0e697Cb9324c19FbC1857D226781234E0",
+      "shares": "0",
+      "claimable": "0.000000 USDC",
+      "entitlementWad": "513888887566",
+      "subUnitWad": "513888887566",
+      "matchesContract": true
+    },
+    {
+      "member": "0xE5A415927B5cCec27BC54a3F7b0140c9dc13bf31",
+      "shares": "2",
+      "claimable": "0.249850 USDC",
+      "entitlementWad": "249850722222217980",
+      "subUnitWad": "722222217980",
+      "matchesContract": true
+    },
+    {
+      "member": "0x8d60F8BB64b8e72dDdFCd24e90d50b60D68d1791",
+      "shares": "1",
+      "claimable": "0.124925 USDC",
+      "entitlementWad": "124925902777775860",
+      "subUnitWad": "902777775860",
+      "matchesContract": true
+    }
+  ],
+  "streamedWad": "1499999999999990400",
+  "subUnitRemainderWad": "2999999990395",
+  "dustWad": "5",
+  "dustUSDC": 5e-18,
+  "identityHolds": true,
+  "balanceBacksOwed": true,
+  "everyMemberMatchesContract": true
+}
